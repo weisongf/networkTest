@@ -335,7 +335,7 @@ Upload
     method: tcp_upload
     title: Upload
 
-.. image:: 0edfd720-a50e-4033-abfb-428ca3d0261d.*
+.. image:: 0edfd720-a50e-4033-abfb-428ca3d0261d.svg
 
 **Stats**:
 
