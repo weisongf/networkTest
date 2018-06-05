@@ -1,0 +1,50 @@
+.. _openstack_l2:
+
+OpenStack L2
+************
+
+In this scenario Shaker launches pairs of instances in the same tenant network.
+Every instance is hosted on a separate compute node, all available compute
+nodes are utilized. The traffic goes within the tenant network (L2 domain).
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      template: l2.hot
+    description: In this scenario Shaker launches pairs of instances in the same tenant
+      network. Every instance is hosted on a separate compute node, all available compute
+      nodes are utilized. The traffic goes within the tenant network (L2 domain).
+    execution:
+      progression: quadratic
+      tests:
+      - class: flent
+        method: tcp_download
+        title: Download
+      - class: flent
+        method: tcp_upload
+        title: Upload
+      - class: flent
+        method: tcp_bidirectional
+        title: Bi-directional
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/full_l2.yaml
+    title: OpenStack L2
+
+**Errors**:
+
+.. code-block:: yaml
+
+    id: 89473a03-eb1a-407f-934c-62c3459993fd
+    scenario: OpenStack L2
+    status: error
+    stderr: 'Error while executing scenario: Agents failed to join: {''shaker_rmkpeu_slave_5'':
+      ''lost'', ''shaker_rmkpeu_slave_4'': ''lost'', ''shaker_rmkpeu_slave_3'': ''lost'',
+      ''shaker_rmkpeu_slave_2'': ''lost'', ''shaker_rmkpeu_slave_1'': ''lost'', ''shaker_rmkpeu_slave_0'':
+      ''lost'', ''shaker_rmkpeu_master_3'': ''lost'', ''shaker_rmkpeu_master_2'': ''lost'',
+      ''shaker_rmkpeu_master_1'': ''lost'', ''shaker_rmkpeu_master_0'': ''lost'', ''shaker_rmkpeu_master_5'':
+      ''lost'', ''shaker_rmkpeu_master_4'': ''lost''}'
+

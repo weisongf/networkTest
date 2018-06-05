@@ -1,0 +1,148 @@
+.. _openstack_l2_performance:
+
+OpenStack L2 Performance
+************************
+
+In this scenario Shaker launches 1 pair of instances in the same tenant
+network. Each instance is hosted on a separate compute node. The traffic goes
+within the tenant network (L2 domain).
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      - compute_nodes: 2
+      template: l2.hot
+    description: In this scenario Shaker launches 1 pair of instances in the same tenant
+      network. Each instance is hosted on a separate compute node. The traffic goes within
+      the tenant network (L2 domain).
+    execution:
+      tests:
+      - class: flent
+        method: ping
+        sla:
+        - '[type == ''agent''] >> (stats.ping_icmp.avg < 2.0)'
+        time: 10
+        title: Ping
+      - class: iperf3
+        sla:
+        - '[type == ''agent''] >> (stats.bandwidth.avg > 5000)'
+        - '[type == ''agent''] >> (stats.retransmits.max < 10)'
+        title: TCP
+      - bandwidth: 0
+        class: iperf3
+        datagram_size: 32
+        sla:
+        - '[type == ''agent''] >> (stats.packets.avg > 100000)'
+        title: UDP
+        udp: true
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/perf_l2.yaml
+    title: OpenStack L2 Performance
+
+Ping
+====
+
+**Test Specification**:
+
+.. code-block:: yaml
+
+    class: flent
+    method: ping
+    sla:
+    - '[type == ''agent''] >> (stats.ping_icmp.avg < 2.0)'
+    time: 10
+    title: Ping
+
+.. image:: 7c82752b-e9a3-4140-ab11-8173e60a936b.svg
+
+**Stats**:
+
+=============  ========  ========  ========
+Metric         Min       Avg       Max     
+=============  ========  ========  ========
+ping_icmp, ms      0.09      0.18      0.91
+ping_udp, ms       0.08      0.08      0.09
+=============  ========  ========  ========
+
+**SLA**:
+
+=========================  ===========  ========  ========
+Expression                 Concurrency  Node      Result  
+=========================  ===========  ========  ========
+stats.ping_icmp.avg < 2.0            1  cmp-008   OK
+=========================  ===========  ========  ========
+
+TCP
+===
+
+**Test Specification**:
+
+.. code-block:: yaml
+
+    class: iperf3
+    interval: 1
+    sla:
+    - '[type == ''agent''] >> (stats.bandwidth.avg > 5000)'
+    - '[type == ''agent''] >> (stats.retransmits.max < 10)'
+    title: TCP
+
+.. image:: 7dd70c36-d35b-4828-9068-2edec709ff0c.svg
+
+**Stats**:
+
+=================  ========  ========  ========
+Metric             Min       Avg       Max     
+=================  ========  ========  ========
+bandwidth, Mbit/s   3456.84   3723.96   3757.10
+retransmits                        15       633
+=================  ========  ========  ========
+
+**SLA**:
+
+==========================  ===========  ========  ========
+Expression                  Concurrency  Node      Result  
+==========================  ===========  ========  ========
+stats.bandwidth.avg > 5000            1  cmp-008   FAIL
+stats.retransmits.max < 10            1  cmp-008   FAIL
+==========================  ===========  ========  ========
+
+UDP
+===
+
+**Test Specification**:
+
+.. code-block:: yaml
+
+    bandwidth: 0
+    class: iperf3
+    datagram_size: 32
+    interval: 1
+    sla:
+    - '[type == ''agent''] >> (stats.packets.avg > 100000)'
+    title: UDP
+    udp: true
+
+.. image:: ffa734f7-2dc8-4dec-a4b3-54c78c61fa78.svg
+
+**Stats**:
+
+============  ========  ========  ========
+Metric        Min       Avg       Max     
+============  ========  ========  ========
+loss, %                     0.11
+jitter, ms                  0.00
+packets, pps    153610    162085    164810
+============  ========  ========  ========
+
+**SLA**:
+
+==========================  ===========  ========  ========
+Expression                  Concurrency  Node      Result  
+==========================  ===========  ========  ========
+stats.packets.avg > 100000            1  cmp-008   OK
+==========================  ===========  ========  ========
+

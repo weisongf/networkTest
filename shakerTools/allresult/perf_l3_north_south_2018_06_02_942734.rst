@@ -1,0 +1,60 @@
+.. _openstack_l3_north_south_performance:
+
+OpenStack L3 North-South Performance
+************************************
+
+In this scenario Shaker launches 1 pair of instances on different compute
+nodes. Instances are in different networks connected to different routers,
+master accesses slave by floating ip. The traffic goes from one network via
+external network to the other network.
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      - compute_nodes: 2
+      template: l3_north_south.hot
+    description: In this scenario Shaker launches 1 pair of instances on different compute
+      nodes. Instances are in different networks connected to different routers, master
+      accesses slave by floating ip. The traffic goes from one network via external network
+      to the other network.
+    execution:
+      tests:
+      - class: flent
+        method: ping
+        sla:
+        - '[type == ''agent''] >> (stats.ping_icmp.avg < 2.0)'
+        time: 10
+        title: Ping
+      - class: iperf3
+        sla:
+        - '[type == ''agent''] >> (stats.bandwidth.avg > 5000)'
+        - '[type == ''agent''] >> (stats.retransmits.max < 10)'
+        title: TCP
+      - bandwidth: 0
+        class: iperf3
+        datagram_size: 32
+        sla:
+        - '[type == ''agent''] >> (stats.packets.avg > 100000)'
+        title: UDP
+        udp: true
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/perf_l3_north_south.yaml
+    title: OpenStack L3 North-South Performance
+
+**Errors**:
+
+.. code-block:: yaml
+
+    id: 54e95545-93cb-44a5-b64d-02c7ac9cf037
+    scenario: OpenStack L3 North-South Performance
+    status: error
+    stderr: 'Error while executing scenario: Failed to deploy Heat stack b7aa3c3b-ad17-49f2-bb83-cc7bf2ab4518.
+      Expected status COMPLETE, but got FAILED. Reason: Resource CREATE failed: ResourceInError:
+      resources.shaker_imupzs_master_0: Went to status ERROR due to "Message: Binding
+      failed for port bf5bd92a-c512-4642-83f8-965f29652043, please check neutron logs
+      for more information., Code: 500"'
+

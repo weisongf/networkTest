@@ -1,0 +1,55 @@
+.. _openstack_l2_cross_az:
+
+OpenStack L2 Cross-AZ
+*********************
+
+In this scenario Shaker launches pairs of instances in the same tenant network.
+Every instance is hosted on a separate compute node, all available compute
+nodes are utilized. The master and slave instances are in different
+availability zones. The scenario is used to test throughput between `nova` and
+`vcenter` zones. The traffic goes within the tenant network (L2 domain).
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      - zones:
+        - nova
+        - vcenter
+      - cross_az
+      template: l2.hot
+    description: In this scenario Shaker launches pairs of instances in the same tenant
+      network. Every instance is hosted on a separate compute node, all available compute
+      nodes are utilized. The master and slave instances are in different availability
+      zones. The scenario is used to test throughput between `nova` and `vcenter` zones.
+      The traffic goes within the tenant network (L2 domain).
+    execution:
+      progression: quadratic
+      tests:
+      - class: flent
+        method: tcp_download
+        title: Download
+      - class: flent
+        method: tcp_upload
+        title: Upload
+      - class: flent
+        method: tcp_bidirectional
+        title: Bi-directional
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/cross_az/full_l2.yaml
+    title: OpenStack L2 Cross-AZ
+
+**Errors**:
+
+.. code-block:: yaml
+
+    id: f1d7e0e3-d893-45a2-90ad-1e35e20f798a
+    scenario: OpenStack L2 Cross-AZ
+    status: error
+    stderr: 'Error while executing scenario: Not enough compute nodes [] for requested
+      instance accommodation {''pair'': True, ''single_room'': True, ''zones'': [''nova'',
+      ''vcenter''], ''cross_az'': True}'
+

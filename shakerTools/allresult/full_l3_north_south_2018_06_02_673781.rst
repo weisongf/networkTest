@@ -1,0 +1,51 @@
+.. _openstack_l3_north_south:
+
+OpenStack L3 North-South
+************************
+
+In this scenario Shaker launches pairs of instances on different compute nodes.
+All available compute nodes are utilized. Instances are in different networks
+connected to different routers, master accesses slave by floating ip. The
+traffic goes from one network via external network to the other network.
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      template: l3_north_south.hot
+    description: In this scenario Shaker launches pairs of instances on different compute
+      nodes. All available compute nodes are utilized. Instances are in different networks
+      connected to different routers, master accesses slave by floating ip. The traffic
+      goes from one network via external network to the other network.
+    execution:
+      progression: quadratic
+      tests:
+      - class: flent
+        method: tcp_download
+        title: Download
+      - class: flent
+        method: tcp_upload
+        title: Upload
+      - class: flent
+        method: tcp_bidirectional
+        title: Bi-directional
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/full_l3_north_south.yaml
+    title: OpenStack L3 North-South
+
+**Errors**:
+
+.. code-block:: yaml
+
+    id: 30bef540-65dc-4a8a-ac00-02ca6a257af4
+    scenario: OpenStack L3 North-South
+    status: error
+    stderr: 'Error while executing scenario: Failed to deploy Heat stack 55f7f955-42b2-42da-8de1-31bc21d9b9a4.
+      Expected status COMPLETE, but got FAILED. Reason: Resource CREATE failed: ResourceInError:
+      resources.shaker_fsreip_master_4: Went to status ERROR due to "Message: Binding
+      failed for port c7b887f7-2683-4be3-bdd1-2934c5b74d3b, please check neutron logs
+      for more information., Code: 500"'
+

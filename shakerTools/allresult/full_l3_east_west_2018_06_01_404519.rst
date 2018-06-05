@@ -1,0 +1,52 @@
+.. _openstack_l3_east_west:
+
+OpenStack L3 East-West
+**********************
+
+In this scenario Shaker launches pairs of instances, each instance on its own
+compute node. All available compute nodes are utilized. Instances are connected
+to one of 2 tenant networks, which plugged into single router. The traffic goes
+from one network to the other (L3 east-west).
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      template: l3_east_west.hot
+    description: In this scenario Shaker launches pairs of instances, each instance on
+      its own compute node. All available compute nodes are utilized. Instances are connected
+      to one of 2 tenant networks, which plugged into single router. The traffic goes
+      from one network to the other (L3 east-west).
+    execution:
+      progression: quadratic
+      tests:
+      - class: flent
+        method: tcp_download
+        title: Download
+      - class: flent
+        method: tcp_upload
+        title: Upload
+      - class: flent
+        method: tcp_bidirectional
+        title: Bi-directional
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/full_l3_east_west.yaml
+    title: OpenStack L3 East-West
+
+**Errors**:
+
+.. code-block:: yaml
+
+    id: d528ea05-f57b-4051-bac1-0a83f3c8bc64
+    scenario: OpenStack L3 East-West
+    status: error
+    stderr: 'Error while executing scenario: Agents failed to join: {''shaker_suokfz_slave_1'':
+      ''lost'', ''shaker_suokfz_slave_0'': ''lost'', ''shaker_suokfz_slave_3'': ''lost'',
+      ''shaker_suokfz_slave_2'': ''lost'', ''shaker_suokfz_slave_5'': ''lost'', ''shaker_suokfz_slave_4'':
+      ''lost'', ''shaker_suokfz_master_5'': ''lost'', ''shaker_suokfz_master_4'': ''lost'',
+      ''shaker_suokfz_master_1'': ''lost'', ''shaker_suokfz_master_0'': ''lost'', ''shaker_suokfz_master_3'':
+      ''lost'', ''shaker_suokfz_master_2'': ''lost''}'
+

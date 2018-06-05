@@ -1,0 +1,56 @@
+.. _openstack_l3_east_west_performance:
+
+OpenStack L3 East-West Performance
+**********************************
+
+In this scenario Shaker launches 1 pair of instances, each instance on its own
+compute node. Instances are connected to one of 2 tenant networks, which
+plugged into single router. The traffic goes from one network to the other (L3
+east-west).
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      - compute_nodes: 2
+      template: l3_east_west.hot
+    description: In this scenario Shaker launches 1 pair of instances, each instance on
+      its own compute node. Instances are connected to one of 2 tenant networks, which
+      plugged into single router. The traffic goes from one network to the other (L3 east-west).
+    execution:
+      tests:
+      - class: flent
+        method: ping
+        sla:
+        - '[type == ''agent''] >> (stats.ping_icmp.avg < 2.0)'
+        time: 10
+        title: Ping
+      - class: iperf3
+        sla:
+        - '[type == ''agent''] >> (stats.bandwidth.avg > 5000)'
+        - '[type == ''agent''] >> (stats.retransmits.max < 10)'
+        title: TCP
+      - bandwidth: 0
+        class: iperf3
+        datagram_size: 32
+        sla:
+        - '[type == ''agent''] >> (stats.packets.avg > 100000)'
+        title: UDP
+        udp: true
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/perf_l3_east_west.yaml
+    title: OpenStack L3 East-West Performance
+
+**Errors**:
+
+.. code-block:: yaml
+
+    id: 02fdf10a-6363-4145-9b1c-5f6cfda2efc4
+    scenario: OpenStack L3 East-West Performance
+    status: error
+    stderr: 'Error while executing scenario: Agents failed to join: {''shaker_isudpo_slave_0'':
+      ''lost'', ''shaker_isudpo_master_0'': ''lost''}'
+

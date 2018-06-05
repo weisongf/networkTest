@@ -1,0 +1,59 @@
+.. _openstack_l3_east_west_performance:
+
+OpenStack L3 East-West Performance
+**********************************
+
+In this scenario Shaker launches 1 pair of instances, each instance on its own
+compute node. Instances are connected to one of 2 tenant networks, which
+plugged into single router. The traffic goes from one network to the other (L3
+east-west).
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      - compute_nodes: 2
+      template: l3_east_west.hot
+    description: In this scenario Shaker launches 1 pair of instances, each instance on
+      its own compute node. Instances are connected to one of 2 tenant networks, which
+      plugged into single router. The traffic goes from one network to the other (L3 east-west).
+    execution:
+      tests:
+      - class: flent
+        method: ping
+        sla:
+        - '[type == ''agent''] >> (stats.ping_icmp.avg < 2.0)'
+        time: 10
+        title: Ping
+      - class: iperf3
+        sla:
+        - '[type == ''agent''] >> (stats.bandwidth.avg > 5000)'
+        - '[type == ''agent''] >> (stats.retransmits.max < 10)'
+        title: TCP
+      - bandwidth: 0
+        class: iperf3
+        datagram_size: 32
+        sla:
+        - '[type == ''agent''] >> (stats.packets.avg > 100000)'
+        title: UDP
+        udp: true
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/perf_l3_east_west.yaml
+    title: OpenStack L3 East-West Performance
+
+**Errors**:
+
+.. code-block:: yaml
+
+    id: c04bb690-5304-4f9b-8bd6-08b0c2de4073
+    scenario: OpenStack L3 East-West Performance
+    status: error
+    stderr: 'Error while executing scenario: Failed to deploy Heat stack 413b2fa6-b83b-412a-87ad-08a1e8affebd.
+      Expected status COMPLETE, but got FAILED. Reason: Resource CREATE failed: ResourceInError:
+      resources.shaker_pidkos_master_0: Went to status ERROR due to "Message: Build of
+      instance 901bfcbc-5940-4906-922f-f7fd31196c44 aborted: Failed to allocate the network(s),
+      not rescheduling., Code: 500"'
+

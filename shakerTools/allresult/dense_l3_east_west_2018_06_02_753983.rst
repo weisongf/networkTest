@@ -1,0 +1,51 @@
+.. _openstack_l3_east_west_dense:
+
+OpenStack L3 East-West Dense
+****************************
+
+In this scenario Shaker launches pairs of instances on the same compute node.
+Instances are connected to different tenant networks connected to one router.
+The traffic goes from one network to the other (L3 east-west).
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - double_room
+      - density: 8
+      - compute_nodes: 1
+      template: l3_east_west.hot
+    description: In this scenario Shaker launches pairs of instances on the same compute
+      node. Instances are connected to different tenant networks connected to one router.
+      The traffic goes from one network to the other (L3 east-west).
+    execution:
+      progression: linear
+      tests:
+      - class: flent
+        method: tcp_download
+        title: Download
+      - class: flent
+        method: tcp_upload
+        title: Upload
+      - class: flent
+        method: tcp_bidirectional
+        title: Bi-directional
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/dense_l3_east_west.yaml
+    title: OpenStack L3 East-West Dense
+
+**Errors**:
+
+.. code-block:: yaml
+
+    id: 293d1917-572d-4cc4-ae3f-73463c78873c
+    scenario: OpenStack L3 East-West Dense
+    status: error
+    stderr: 'Error while executing scenario: Failed to deploy Heat stack 3184736d-26ac-4f6c-aa74-29cd31edf09a.
+      Expected status COMPLETE, but got FAILED. Reason: Resource CREATE failed: ResourceInError:
+      resources.shaker_uoizem_master_6: Went to status ERROR due to "Message: Binding
+      failed for port 4cef86eb-a38b-4d81-9e98-ce8dc59c2894, please check neutron logs
+      for more information., Code: 500"'
+

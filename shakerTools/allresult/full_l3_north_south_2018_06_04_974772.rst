@@ -1,0 +1,227 @@
+.. _openstack_l3_north_south:
+
+OpenStack L3 North-South
+************************
+
+In this scenario Shaker launches pairs of instances on different compute nodes.
+All available compute nodes are utilized. Instances are in different networks
+connected to different routers, master accesses slave by floating ip. The
+traffic goes from one network via external network to the other network.
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      template: l3_north_south.hot
+    description: In this scenario Shaker launches pairs of instances on different compute
+      nodes. All available compute nodes are utilized. Instances are in different networks
+      connected to different routers, master accesses slave by floating ip. The traffic
+      goes from one network via external network to the other network.
+    execution:
+      progression: quadratic
+      tests:
+      - class: flent
+        method: tcp_download
+        title: Download
+      - class: flent
+        method: tcp_upload
+        title: Upload
+      - class: flent
+        method: tcp_bidirectional
+        title: Bi-directional
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/full_l3_north_south.yaml
+    title: OpenStack L3 North-South
+
+Bi-directional
+==============
+
+**Test Specification**:
+
+.. code-block:: yaml
+
+    class: flent
+    method: tcp_bidirectional
+    title: Bi-directional
+
+.. image:: 52b568ec-55bc-4639-a451-cb31de578c0e.svg
+
+**Stats**:
+
+===========  =============  =====================  ===================
+concurrency  ping_icmp, ms  tcp_download, Mbits/s  tcp_upload, Mbits/s
+===========  =============  =====================  ===================
+          1           2.95                 993.03              1013.74
+          3           3.99                 332.84               311.63
+          6           5.01                 145.85               143.11
+===========  =============  =====================  ===================
+
+Concurrency 1
+-------------
+
+**Stats**:
+
+========  =============  =====================  ===================
+node      ping_icmp, ms  tcp_download, Mbits/s  tcp_upload, Mbits/s
+========  =============  =====================  ===================
+cmp-004            2.95                 993.03              1013.74
+========  =============  =====================  ===================
+
+Concurrency 3
+-------------
+
+**Stats**:
+
+========  =============  =====================  ===================
+node      ping_icmp, ms  tcp_download, Mbits/s  tcp_upload, Mbits/s
+========  =============  =====================  ===================
+cmp-004            3.96                 338.51               320.98
+cmp-005            4.32                 344.87               332.89
+cmp-007            3.70                 315.14               281.03
+========  =============  =====================  ===================
+
+Concurrency 6
+-------------
+
+**Stats**:
+
+========  =============  =====================  ===================
+node      ping_icmp, ms  tcp_download, Mbits/s  tcp_upload, Mbits/s
+========  =============  =====================  ===================
+cmp-001            4.97                 137.71               141.54
+cmp-002            5.01                 153.07               137.60
+cmp-004            5.00                 144.61               146.72
+cmp-005            5.04                 147.46               143.09
+cmp-006            5.04                 151.09               170.87
+cmp-007            5.00                 141.17               118.81
+========  =============  =====================  ===================
+
+Download
+========
+
+**Test Specification**:
+
+.. code-block:: yaml
+
+    class: flent
+    method: tcp_download
+    title: Download
+
+.. image:: 90b2b757-3390-440e-8c96-375777c23290.svg
+
+**Stats**:
+
+===========  =============  =====================
+concurrency  ping_icmp, ms  tcp_download, Mbits/s
+===========  =============  =====================
+          1           2.32                2101.20
+          3           3.25                 688.19
+          6           4.13                 315.55
+===========  =============  =====================
+
+Concurrency 1
+-------------
+
+**Stats**:
+
+========  =============  =====================
+node      ping_icmp, ms  tcp_download, Mbits/s
+========  =============  =====================
+cmp-004            2.32                2101.20
+========  =============  =====================
+
+Concurrency 3
+-------------
+
+**Stats**:
+
+========  =============  =====================
+node      ping_icmp, ms  tcp_download, Mbits/s
+========  =============  =====================
+cmp-004            3.20                 644.32
+cmp-005            3.28                 634.99
+cmp-007            3.26                 785.26
+========  =============  =====================
+
+Concurrency 6
+-------------
+
+**Stats**:
+
+========  =============  =====================
+node      ping_icmp, ms  tcp_download, Mbits/s
+========  =============  =====================
+cmp-001            4.25                 339.28
+cmp-002            4.22                 306.63
+cmp-004            3.99                 305.86
+cmp-005            4.13                 306.48
+cmp-006            4.15                 299.08
+cmp-007            4.07                 335.94
+========  =============  =====================
+
+Upload
+======
+
+**Test Specification**:
+
+.. code-block:: yaml
+
+    class: flent
+    method: tcp_upload
+    title: Upload
+
+.. image:: 9a393ff5-775a-4c66-a8d4-2453fed6cb41.svg
+
+**Stats**:
+
+===========  =============  ===================
+concurrency  ping_icmp, ms  tcp_upload, Mbits/s
+===========  =============  ===================
+          1           2.67              2053.79
+          3           3.59               665.40
+          6           4.36               299.02
+===========  =============  ===================
+
+Concurrency 1
+-------------
+
+**Stats**:
+
+========  =============  ===================
+node      ping_icmp, ms  tcp_upload, Mbits/s
+========  =============  ===================
+cmp-004            2.67              2053.79
+========  =============  ===================
+
+Concurrency 3
+-------------
+
+**Stats**:
+
+========  =============  ===================
+node      ping_icmp, ms  tcp_upload, Mbits/s
+========  =============  ===================
+cmp-004            3.64               836.94
+cmp-005            3.58               551.76
+cmp-007            3.54               607.50
+========  =============  ===================
+
+Concurrency 6
+-------------
+
+**Stats**:
+
+========  =============  ===================
+node      ping_icmp, ms  tcp_upload, Mbits/s
+========  =============  ===================
+cmp-001            4.53               300.00
+cmp-002            4.27               279.99
+cmp-004            4.24               276.48
+cmp-005            4.31               330.09
+cmp-006            4.44               298.95
+cmp-007            4.36               308.61
+========  =============  ===================
+

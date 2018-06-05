@@ -1,0 +1,51 @@
+.. _openstack_l3_east_west:
+
+OpenStack L3 East-West
+**********************
+
+In this scenario Shaker launches pairs of instances, each instance on its own
+compute node. All available compute nodes are utilized. Instances are connected
+to one of 2 tenant networks, which plugged into single router. The traffic goes
+from one network to the other (L3 east-west).
+
+**Scenario**:
+
+.. code-block:: yaml
+
+    deployment:
+      accommodation:
+      - pair
+      - single_room
+      template: l3_east_west.hot
+    description: In this scenario Shaker launches pairs of instances, each instance on
+      its own compute node. All available compute nodes are utilized. Instances are connected
+      to one of 2 tenant networks, which plugged into single router. The traffic goes
+      from one network to the other (L3 east-west).
+    execution:
+      progression: quadratic
+      tests:
+      - class: flent
+        method: tcp_download
+        title: Download
+      - class: flent
+        method: tcp_upload
+        title: Upload
+      - class: flent
+        method: tcp_bidirectional
+        title: Bi-directional
+    file_name: /root/shaker/lib/python2.7/site-packages/shaker/scenarios/openstack/full_l3_east_west.yaml
+    title: OpenStack L3 East-West
+
+**Errors**:
+
+.. code-block:: yaml
+
+    id: ee92834c-beca-411a-b10d-65c058cb7725
+    scenario: OpenStack L3 East-West
+    status: error
+    stderr: 'Error while executing scenario: Failed to deploy Heat stack 44c2931a-dbb6-4489-8cce-f3b3f72a13cf.
+      Expected status COMPLETE, but got FAILED. Reason: Resource CREATE failed: ResourceInError:
+      resources.shaker_sfzpmk_master_1: Went to status ERROR due to "Message: Binding
+      failed for port 540ed33b-b0f8-403c-9e6a-50733907dacb, please check neutron logs
+      for more information., Code: 500"'
+
